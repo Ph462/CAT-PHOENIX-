@@ -1,0 +1,1522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CAT AI - Your intelligent feline-inspired assistant">
+    <title>🐱 CAT AI - Intelligent Assistant</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #ff6b6b;
+            --primary-hover: #ff8e8e;
+            --user-message-bg: #e3f2fd;
+            --ai-message-bg: #f1f1f1;
+            --text-color: #333;
+            --light-text: #777;
+            --bg-color: #f5f5f5;
+            --chat-bg: #ffffff;
+            --border-radius: 12px;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --spacing-sm: 8px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --cat-purple: #9b59b6;
+            --cat-pink: #e84393;
+            --voice-recording: #ff4757;
+            --voice-recording-hover: #ff6b81;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #bb86fc;
+            --primary-hover: #a370f0;
+            --user-message-bg: #3700b3;
+            --ai-message-bg: #1f1f1f;
+            --text-color: #e1e1e1;
+            --light-text: #a0a0a0;
+            --bg-color: #121212;
+            --chat-bg: #1e1e1e;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            --voice-recording: #ff6b81;
+            --voice-recording-hover: #ff8fa3;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: var(--spacing-md);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-md);
+            max-width: 800px;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            font-size: 1.5rem;
+            padding: var(--spacing-sm);
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(30deg) scale(1.1);
+        }
+
+        .chat-container {
+            background-color: var(--chat-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            max-width: 800px;
+            width: 100%;
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            margin: 0 auto;
+            overflow: hidden;
+            transition: background-color 0.3s ease;
+            position: relative;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, var(--cat-purple), var(--cat-pink));
+            color: white;
+            padding: var(--spacing-md);
+            font-weight: 600;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            transition: background-color 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chat-header::before {
+            content: "🐱";
+            display: inline-block;
+            font-size: 1.5rem;
+            margin-right: 8px;
+            animation: catBounce 2s infinite;
+        }
+
+        @keyframes catBounce {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-5px) rotate(5deg); }
+            50% { transform: translateY(0) rotate(0deg); }
+            75% { transform: translateY(-3px) rotate(-5deg); }
+        }
+
+        .chat-header::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.2) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: translateX(-100%);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            100% { transform: translateX(100%); }
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: var(--spacing-md);
+            overflow-y: auto;
+            scroll-behavior: smooth;
+            background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M30,30 Q50,10 70,30 T90,50 Q70,70 50,90 T10,50 Q30,30 50,10 T90,30" fill="none" stroke="%23f0f0f0" stroke-width="0.5"/></svg>');
+            background-size: 200px;
+            background-repeat: repeat;
+            background-attachment: local;
+        }
+
+        [data-theme="dark"] .chat-messages {
+            background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M30,30 Q50,10 70,30 T90,50 Q70,70 50,90 T10,50 Q30,30 50,10 T90,30" fill="none" stroke="%23222222" stroke-width="0.5"/></svg>');
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background-color: var(--primary-color);
+            border-radius: 3px;
+        }
+
+        .message {
+            margin-bottom: var(--spacing-md);
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: var(--border-radius);
+            max-width: 85%;
+            position: relative;
+            word-wrap: break-word;
+            animation: fadeIn 0.4s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .message:hover {
+            transform: scale(1.01);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .user-message {
+            background-color: var(--user-message-bg);
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
+            color: var(--text-color);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .ai-message {
+            background-color: var(--ai-message-bg);
+            margin-right: auto;
+            border-bottom-left-radius: 4px;
+            color: var(--text-color);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+
+        .ai-message::before {
+            content: "🐾";
+            position: absolute;
+            left: -15px;
+            top: 5px;
+            font-size: 1.2rem;
+            opacity: 0.6;
+        }
+
+        .message-time {
+            display: block;
+            font-size: 0.7rem;
+            color: var(--light-text);
+            text-align: right;
+            margin-top: 4px;
+        }
+
+        .chat-input-container {
+            display: flex;
+            padding: var(--spacing-md);
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            background-color: var(--chat-bg);
+            transition: background-color 0.3s ease;
+            position: relative;
+        }
+
+        #user-input {
+            flex: 1;
+            padding: 10px var(--spacing-md);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 24px;
+            outline: none;
+            font-family: inherit;
+            font-size: 1rem;
+            background-color: var(--chat-bg);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+            padding-right: 90px;
+        }
+
+        #user-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(255, 107, 107, 0.2);
+        }
+
+        #send-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.1var(--spacing-lg);
+            margin-left: var(--spacing-sm);
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 80px;
+            height: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #send-button::after {
+            content: "🐱";
+            position: absolute;
+            top: 50%;
+            left: 80%;
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        #send-button:hover {
+            background-color: var(--primary-hover);
+            transform: scale(1.05);
+        }
+
+        #send-button:hover::after {
+            transform: translate(-50%, -50%) scale(1.5);
+            opacity: 0.8;
+        }
+
+        #send-button:active {
+            transform: scale(0.98);
+        }
+
+        .typing-indicator {
+            display: none;
+            color: var(--light-text);
+            font-style: italic;
+            padding: var(--spacing-sm) var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+            align-items: center;
+        }
+
+        .typing-indicator.active {
+            display: flex;
+        }
+
+        .typing-dots {
+            display: inline-flex;
+            align-items: center;
+            height: 24px;
+            margin-left: 8px;
+        }
+
+        .typing-dots span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            margin: 0 3px;
+            animation: typingAnimation 1.4s infinite ease-in-out;
+        }
+
+        .typing-dots span:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .typing-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typingAnimation {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-5px); }
+        }
+
+        .welcome-message {
+            text-align: center;
+            padding: var(--spacing-lg);
+            color: var(--light-text);
+            animation: welcomeFadeIn 1s ease;
+        }
+
+        @keyframes welcomeFadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .emoji-picker {
+            position: absolute;
+            right: 90px;
+            bottom: 70px;
+            background: var(--chat-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 10px;
+            display: none;
+            z-index: 10;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .emoji-picker.show {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 5px;
+        }
+
+        .emoji-option {
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 5px;
+            transition: all 0.2s ease;
+        }
+
+        .emoji-option:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: scale(1.2);
+        }
+
+        .emoji-trigger {
+            position: absolute;
+            right: 100px;
+            bottom: 20px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--light-text);
+            transition: all 0.2s ease;
+        }
+
+        .emoji-trigger:hover {
+            color: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: var(--primary-color);
+            opacity: 0;
+        }
+
+        .cat-paw {
+            position: absolute;
+            font-size: 1.5rem;
+            opacity: 0;
+            pointer-events: none;
+            animation: pawAnimation 1s forwards;
+        }
+
+        @keyframes pawAnimation {
+            0% { transform: scale(0.5); opacity: 0; }
+            20% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(0.5); opacity: 0; }
+        }
+
+        .reaction-emoji {
+            position: absolute;
+            font-size: 1.2rem;
+            opacity: 0;
+            pointer-events: none;
+            animation: reactionAnimation 2s forwards;
+        }
+
+        @keyframes reactionAnimation {
+            0% { transform: translateY(0) scale(0); opacity: 0; }
+            20% { transform: translateY(-20px) scale(1.2); opacity: 1; }
+            100% { transform: translateY(-50px) scale(0.8); opacity: 0; }
+        }
+
+        /* Voice recording button styles */
+        .voice-button {
+            position: absolute;
+            right: 150px;
+            bottom: 20px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--light-text);
+            transition: all 0.2s ease;
+            z-index: 5;
+        }
+
+        .voice-button:hover {
+            color: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        .voice-button.recording {
+            color: var(--voice-recording);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .voice-wave {
+            position: absolute;
+            right: 150px;
+            bottom: 20px;
+            width: 24px;
+            height: 24px;
+            display: none;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 2px;
+        }
+
+        .voice-wave.active {
+            display: flex;
+        }
+
+        .voice-wave-bar {
+            width: 3px;
+            background-color: var(--voice-recording);
+            border-radius: 3px;
+            animation: waveAnimation 1.5s infinite ease-in-out;
+        }
+
+        .voice-wave-bar:nth-child(1) {
+            height: 8px;
+            animation-delay: 0.1s;
+        }
+
+        .voice-wave-bar:nth-child(2) {
+            height: 12px;
+            animation-delay: 0.3s;
+        }
+
+        .voice-wave-bar:nth-child(3) {
+            height: 16px;
+            animation-delay: 0.5s;
+        }
+
+        .voice-wave-bar:nth-child(4) {
+            height: 12px;
+            animation-delay: 0.3s;
+        }
+
+        .voice-wave-bar:nth-child(5) {
+            height: 8px;
+            animation-delay: 0.1s;
+        }
+
+        @keyframes waveAnimation {
+            0%, 100% { height: 8px; }
+            50% { height: 20px; }
+        }
+
+        /* Settings panel */
+        .settings-panel {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 300px;
+            height: 100vh;
+            background-color: var(--chat-bg);
+            box-shadow: var(--shadow);
+            transition: right 0.3s ease;
+            z-index: 100;
+            padding: var(--spacing-md);
+            overflow-y: auto;
+        }
+
+        .settings-panel.open {
+            right: 0;
+        }
+
+        .settings-toggle {
+            position: fixed;
+            right: 20px;
+            top: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            z-index: 101;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .settings-toggle:hover {
+            background-color: var(--primary-hover);
+            transform: rotate(30deg);
+        }
+
+        .settings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-md);
+            padding-bottom: var(--spacing-sm);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .settings-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .close-settings {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--light-text);
+        }
+
+        .settings-section {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .settings-section-title {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: var(--spacing-sm);
+            color: var(--primary-color);
+        }
+
+        .settings-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .settings-label {
+            font-size: 0.9rem;
+        }
+
+        .settings-select {
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            background-color: var(--chat-bg);
+            color: var(--text-color);
+        }
+
+        .settings-toggle-btn {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .settings-toggle-checkbox {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .settings-toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .settings-toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        .settings-toggle-checkbox:checked + .settings-toggle-slider {
+            background-color: var(--primary-color);
+        }
+
+        .settings-toggle-checkbox:checked + .settings-toggle-slider:before {
+            transform: translateX(26px);
+        }
+
+        /* TTS speaker button */
+        .tts-button {
+            background: none;
+            border: none;
+            color: var(--light-text);
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-left: 5px;
+            transition: color 0.2s ease;
+        }
+
+        .tts-button:hover {
+            color: var(--primary-color);
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: var(--shadow);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .notification.show {
+            opacity: 1;
+        }
+
+        /* Cat ear header decoration */
+        .cat-ears {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 60px;
+        }
+
+        .cat-ear {
+            width: 20px;
+            height: 30px;
+            background-color: var(--chat-bg);
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            transform: rotate(0deg);
+            animation: earTwitch 5s infinite;
+        }
+
+        .cat-ear.right {
+            animation-delay: 1s;
+        }
+
+        @keyframes earTwitch {
+            0%, 96%, 100% { transform: rotate(0deg); }
+            98% { transform: rotate(-15deg); }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: var(--spacing-sm);
+            }
+            
+            .chat-container {
+                height: 90vh;
+            }
+            
+            .message {
+                max-width: 90%;
+            }
+            
+            #user-input {
+                padding: 8px var(--spacing-md);
+                padding-right: 80px;
+            }
+
+            .emoji-picker {
+                right: 10px;
+                bottom: 60px;
+                grid-template-columns: repeat(5, 1fr);
+            }
+
+            .emoji-trigger {
+                right: 80px;
+                bottom: 18px;
+            }
+
+            .voice-button {
+                right: 60px;
+                bottom: 18px;
+            }
+
+            .voice-wave {
+                right: 60px;
+                bottom: 18px;
+            }
+
+            .settings-panel {
+                width: 100%;
+                right: -100%;
+            }
+
+            .settings-panel.open {
+                right: 0;
+            }
+        }
+
+        *:focus-visible {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <button class="settings-toggle" aria-label="Open settings">⚙️</button>
+    
+    <div class="settings-panel" id="settings-panel">
+        <div class="settings-header">
+            <h2 class="settings-title">CAT AI Settings</h2>
+            <button class="close-settings" aria-label="Close settings">×</button>
+        </div>
+        
+        <div class="settings-section">
+            <h3 class="settings-section-title">Voice Settings</h3>
+            
+            <div class="settings-option">
+                <span class="settings-label">Enable Voice Input</span>
+                <label class="settings-toggle-btn">
+                    <input type="checkbox" class="settings-toggle-checkbox" id="enable-voice-input" checked>
+                    <span class="settings-toggle-slider"></span>
+                </label>
+            </div>
+            
+            <div class="settings-option">
+                <span class="settings-label">Enable Text-to-Speech</span>
+                <label class="settings-toggle-btn">
+                    <input type="checkbox" class="settings-toggle-checkbox" id="enable-tts" checked>
+                    <span class="settings-toggle-slider"></span>
+                </label>
+            </div>
+            
+            <div class="settings-option">
+                <span class="settings-label">TTS Voice</span>
+                <select class="settings-select" id="tts-voice">
+                    <!-- Options will be populated by JavaScript -->
+                </select>
+            </div>
+            
+            <div class="settings-option">
+                <span class="settings-label">TTS Speed</span>
+                <select class="settings-select" id="tts-speed">
+                    <option value="0.8">Slow</option>
+                    <option value="1" selected>Normal</option>
+                    <option value="1.2">Fast</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="settings-section">
+            <h3 class="settings-section-title">Appearance</h3>
+            
+            <div class="settings-option">
+                <span class="settings-label">Dark Mode</span>
+                <label class="settings-toggle-btn">
+                    <input type="checkbox" class="settings-toggle-checkbox" id="dark-mode-toggle">
+                    <span class="settings-toggle-slider"></span>
+                </label>
+            </div>
+            
+            <div class="settings-option">
+                <span class="settings-label">Animations</span>
+                <label class="settings-toggle-btn">
+                    <input type="checkbox" class="settings-toggle-checkbox" id="enable-animations" checked>
+                    <span class="settings-toggle-slider"></span>
+                </label>
+            </div>
+        </div>
+        
+        <div class="settings-section">
+            <h3 class="settings-section-title">About</h3>
+            <p style="font-size: 0.9rem; margin-bottom: var(--spacing-sm);">CAT AI Assistant v1.0</p>
+            <p style="font-size: 0.8rem; color: var(--light-text);">A feline-inspired AI assistant with voice capabilities.</p>
+        </div>
+    </div>
+
+    <div class="notification" id="notification"></div>
+
+    <div class="header-container">
+        <h1>🐱 CAT AI Assistant</h1>
+        <button class="theme-toggle" aria-label="Toggle dark mode">🌓</button>
+    </div>
+
+    <div class="chat-container" role="region" aria-live="polite">
+        <div class="cat-ears">
+            <div class="cat-ear left"></div>
+            <div class="cat-ear right"></div>
+        </div>
+        <div class="chat-header" role="heading" aria-level="2">
+            CAT AI
+        </div>
+        <div class="chat-messages" id="chat-messages">
+            <div class="welcome-message">
+                <p>Hello! I'm Cat, your AI assistant. Ask me anything! 😺</p>
+                <p style="margin-top: 10px; font-size: 0.9rem;">Try asking about cats, math, or just say hi! 🐾</p>
+                <p style="margin-top: 10px; font-size: 0.8rem;">You can also use voice commands by clicking the mic button!</p>
+            </div>
+            <div class="typing-indicator" id="typing-indicator" aria-hidden="true">
+                <span>CAT is typing</span>
+                <span class="typing-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+            </div>
+        </div>
+        <div class="chat-input-container">
+            <input type="text" id="user-input" placeholder="Type your message here... 😸" autocomplete="off" aria-label="Type your message">
+            <button class="emoji-trigger" aria-label="Open emoji picker">😺</button>
+            <button class="voice-button" id="voice-button" aria-label="Start voice recording">🎤</button>
+            <div class="voice-wave" id="voice-wave">
+                <div class="voice-wave-bar"></div>
+                <div class="voice-wave-bar"></div>
+                <div class="voice-wave-bar"></div>
+                <div class="voice-wave-bar"></div>
+                <div class="voice-wave-bar"></div>
+            </div>
+            <div class="emoji-picker" id="emoji-picker"></div>
+            <button id="send-button" aria-label="Send message">Send</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // DOM Elements
+            const chatMessages = document.getElementById('chat-messages');
+            const userInput = document.getElementById('user-input');
+            const sendButton = document.getElementById('send-button');
+            const typingIndicator = document.getElementById('typing-indicator');
+            const themeToggle = document.querySelector('.theme-toggle');
+            const welcomeMessage = document.querySelector('.welcome-message');
+            const emojiTrigger = document.querySelector('.emoji-trigger');
+            const emojiPicker = document.getElementById('emoji-picker');
+            const voiceButton = document.getElementById('voice-button');
+            const voiceWave = document.getElementById('voice-wave');
+            const settingsPanel = document.getElementById('settings-panel');
+            const settingsToggle = document.querySelector('.settings-toggle');
+            const closeSettings = document.querySelector('.close-settings');
+            const enableVoiceInput = document.getElementById('enable-voice-input');
+            const enableTTS = document.getElementById('enable-tts');
+            const ttsVoiceSelect = document.getElementById('tts-voice');
+            const ttsSpeedSelect = document.getElementById('tts-speed');
+            const darkModeToggle = document.getElementById('dark-mode-toggle');
+            const enableAnimations = document.getElementById('enable-animations');
+            const notification = document.getElementById('notification');
+            
+            // State variables
+            let isRecording = false;
+            let recognition;
+            let speechSynthesis = window.speechSynthesis;
+            let voices = [];
+            let selectedVoice = null;
+            
+            // Popular emojis for the picker
+            const emojis = ['😺', '😸', '😹', '😻', '😼', '😽', '🙀', '😿', '😾', 
+                          '🐱', '🐈', '🐾', '❤️', '👍', '😂', '😊', '🤔', '👋', 
+                          '🎉', '🤷', '🍕', '☕', '🌈', '✨', '🎈', '💡', '📚'];
+            
+            // Initialize the app
+            init();
+            
+            function init() {
+                // Create emoji picker
+                setupEmojiPicker();
+                
+                // Setup voice recognition
+                setupVoiceRecognition();
+                
+                // Setup text-to-speech
+                setupTextToSpeech();
+                
+                // Setup settings panel
+                setupSettingsPanel();
+                
+                // Load chat history when page loads
+                loadChatHistory();
+                
+                // Focus input on load
+                userInput.focus();
+                
+                // Check if browser supports speech recognition
+                if (!('webkitSpeechRecognition' in window)) {
+                    voiceButton.style.display = 'none';
+                    showNotification("Voice input not supported in your browser");
+                }
+                
+                // Check if browser supports speech synthesis
+                if (!speechSynthesis) {
+                    enableTTS.disabled = true;
+                    showNotification("Text-to-speech not supported in your browser");
+                }
+            }
+            
+            function setupEmojiPicker() {
+                emojis.forEach(emoji => {
+                    const emojiOption = document.createElement('div');
+                    emojiOption.className = 'emoji-option';
+                    emojiOption.textContent = emoji;
+                    emojiOption.addEventListener('click', () => {
+                        userInput.value += emoji;
+                        userInput.focus();
+                        emojiPicker.classList.remove('show');
+                        createPawAnimation(emojiTrigger);
+                    });
+                    emojiPicker.appendChild(emojiOption);
+                });
+                
+                // Toggle emoji picker
+                emojiTrigger.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    emojiPicker.classList.toggle('show');
+                    createPawAnimation(emojiTrigger);
+                });
+                
+                // Close emoji picker when clicking elsewhere
+                document.addEventListener('click', (e) => {
+                    if (!emojiPicker.contains(e.target) && e.target !== emojiTrigger) {
+                        emojiPicker.classList.remove('show');
+                    }
+                });
+            }
+            
+            function setupVoiceRecognition() {
+                try {
+                    recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+                    recognition.continuous = false;
+                    recognition.interimResults = false;
+                    recognition.maxAlternatives = 1;
+                    
+                    recognition.onstart = () => {
+                        isRecording = true;
+                        voiceButton.classList.add('recording');
+                        voiceWave.classList.add('active');
+                        showNotification("Listening... Speak now");
+                    };
+                    
+                    recognition.onresult = (event) => {
+                        const transcript = event.results[0][0].transcript;
+                        userInput.value = transcript;
+                        showNotification("Voice input received");
+                    };
+                    
+                    recognition.onerror = (event) => {
+                        console.error('Speech recognition error', event.error);
+                        showNotification("Error: " + event.error);
+                        stopRecording();
+                    };
+                    
+                    recognition.onend = () => {
+                        stopRecording();
+                    };
+                    
+                    voiceButton.addEventListener('click', toggleRecording);
+                } catch (e) {
+                    console.error('Speech recognition setup failed:', e);
+                    voiceButton.style.display = 'none';
+                }
+            }
+            
+            function setupTextToSpeech() {
+                // Load available voices
+                function loadVoices() {
+                    voices = speechSynthesis.getVoices();
+                    ttsVoiceSelect.innerHTML = '';
+                    
+                    voices.forEach((voice, index) => {
+                        const option = document.createElement('option');
+                        option.value = index;
+                        option.textContent = `${voice.name} (${voice.lang})`;
+                        ttsVoiceSelect.appendChild(option);
+                    });
+                    
+                    // Try to find a default voice that sounds good
+                    const defaultVoice = voices.find(voice => 
+                        voice.name.includes('Google') || 
+                        voice.name.includes('Microsoft') || 
+                        voice.lang.includes('en-')
+                    );
+                    
+                    if (defaultVoice) {
+                        selectedVoice = defaultVoice;
+                        ttsVoiceSelect.value = voices.indexOf(defaultVoice);
+                    }
+                }
+                
+                // Load voices when they become available
+                speechSynthesis.onvoiceschanged = loadVoices;
+                loadVoices();
+                
+                // Set up voice selection
+                ttsVoiceSelect.addEventListener('change', () => {
+                    selectedVoice = voices[ttsVoiceSelect.value];
+                });
+            }
+            
+            function setupSettingsPanel() {
+                // Toggle settings panel
+                settingsToggle.addEventListener('click', () => {
+                    settingsPanel.classList.add('open');
+                });
+                
+                closeSettings.addEventListener('click', () => {
+                    settingsPanel.classList.remove('open');
+                });
+                
+                // Sync dark mode toggle with theme toggle
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                darkModeToggle.checked = currentTheme === 'dark';
+                
+                darkModeToggle.addEventListener('change', () => {
+                    const newTheme = darkModeToggle.checked ? 'dark' : 'light';
+                    document.documentElement.setAttribute('data-theme', newTheme);
+                    localStorage.setItem('theme', newTheme);
+                    themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+                });
+                
+                // Load saved settings from localStorage
+                loadSettings();
+                
+                // Save settings when changed
+                enableVoiceInput.addEventListener('change', saveSettings);
+                enableTTS.addEventListener('change', saveSettings);
+                ttsVoiceSelect.addEventListener('change', saveSettings);
+                ttsSpeedSelect.addEventListener('change', saveSettings);
+                darkModeToggle.addEventListener('change', saveSettings);
+                enableAnimations.addEventListener('change', saveSettings);
+            }
+            
+            function loadSettings() {
+                const settings = JSON.parse(localStorage.getItem('cat-ai-settings')) || {};
+                
+                if (settings.enableVoiceInput !== undefined) {
+                    enableVoiceInput.checked = settings.enableVoiceInput;
+                }
+                
+                if (settings.enableTTS !== undefined) {
+                    enableTTS.checked = settings.enableTTS;
+                }
+                
+                if (settings.ttsVoiceIndex !== undefined && voices[settings.ttsVoiceIndex]) {
+                    ttsVoiceSelect.value = settings.ttsVoiceIndex;
+                    selectedVoice = voices[settings.ttsVoiceIndex];
+                }
+                
+                if (settings.ttsSpeed !== undefined) {
+                    ttsSpeedSelect.value = settings.ttsSpeed;
+                }
+                
+                if (settings.darkMode !== undefined) {
+                    darkModeToggle.checked = settings.darkMode;
+                    const theme = settings.darkMode ? 'dark' : 'light';
+                    document.documentElement.setAttribute('data-theme', theme);
+                    themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+                }
+                
+                if (settings.enableAnimations !== undefined) {
+                    enableAnimations.checked = settings.enableAnimations;
+                }
+            }
+            
+            function saveSettings() {
+                const settings = {
+                    enableVoiceInput: enableVoiceInput.checked,
+                    enableTTS: enableTTS.checked,
+                    ttsVoiceIndex: parseInt(ttsVoiceSelect.value),
+                    ttsSpeed: parseFloat(ttsSpeedSelect.value),
+                    darkMode: darkModeToggle.checked,
+                    enableAnimations: enableAnimations.checked
+                };
+                
+                localStorage.setItem('cat-ai-settings', JSON.stringify(settings));
+                showNotification("Settings saved");
+            }
+            
+            function toggleRecording() {
+                if (!enableVoiceInput.checked) {
+                    showNotification("Voice input is disabled in settings");
+                    return;
+                }
+                
+                if (isRecording) {
+                    recognition.stop();
+                } else {
+                    try {
+                        recognition.start();
+                    } catch (e) {
+                        console.error('Speech recognition error:', e);
+                        showNotification("Error starting voice input");
+                    }
+                }
+            }
+            
+            function stopRecording() {
+                isRecording = false;
+                voiceButton.classList.remove('recording');
+                voiceWave.classList.remove('active');
+            }
+            
+            function speak(text) {
+                if (!enableTTS.checked || !speechSynthesis) return;
+                
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.voice = selectedVoice;
+                utterance.rate = parseFloat(ttsSpeedSelect.value);
+                utterance.pitch = 1;
+                
+                // Add cat-like pauses and variations for a more natural feel
+                const sentences = text.split(/[.!?]/);
+                if (sentences.length > 1) {
+                    // Add small pauses between sentences
+                    utterance.text = sentences.join('. ') + '.';
+                }
+                
+                // Add some purring sounds randomly
+                if (Math.random() > 0.7) {
+                    utterance.text = utterance.text.replace(/([.!?]|$)/, ' *purr*$1');
+                }
+                
+                speechSynthesis.speak(utterance);
+            }
+            
+            function showNotification(message) {
+                if (!enableAnimations.checked) return;
+                
+                notification.textContent = message;
+                notification.classList.add('show');
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+            
+            // Create paw animation
+            function createPawAnimation(element) {
+                if (!enableAnimations.checked) return;
+                
+                const paw = document.createElement('div');
+                paw.className = 'cat-paw';
+                paw.textContent = '🐾';
+                paw.style.left = `${element.offsetLeft + element.offsetWidth/2 - 10}px`;
+                paw.style.top = `${element.offsetTop - 20}px`;
+                document.body.appendChild(paw);
+                
+                setTimeout(() => {
+                    paw.remove();
+                }, 1000);
+            }
+            
+            // Create reaction emoji
+            function createReaction(emoji, element) {
+                if (!enableAnimations.checked) return;
+                
+                const reaction = document.createElement('div');
+                reaction.className = 'reaction-emoji';
+                reaction.textContent = emoji;
+                reaction.style.left = `${element.offsetLeft + element.offsetWidth/2 - 10}px`;
+                reaction.style.top = `${element.offsetTop - 10}px`;
+                document.body.appendChild(reaction);
+                
+                setTimeout(() => {
+                    reaction.remove();
+                }, 2000);
+            }
+            
+            // Create confetti effect
+            function createConfetti() {
+                if (!enableAnimations.checked) return;
+                
+                for (let i = 0; i < 30; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = `${Math.random() * 100}vw`;
+                    confetti.style.top = `-10px`;
+                    confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                    confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                    confetti.style.width = `${Math.random() * 10 + 5}px`;
+                    confetti.style.height = `${Math.random() * 10 + 5}px`;
+                    document.body.appendChild(confetti);
+                    
+                    // Animate
+                    setTimeout(() => {
+                        confetti.style.opacity = '1';
+                        confetti.style.top = `${Math.random() * 100}vh`;
+                        confetti.style.left = `${parseFloat(confetti.style.left) + (Math.random() * 200 - 100)}px`;
+                        confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                        
+                        setTimeout(() => {
+                            confetti.style.opacity = '0';
+                            setTimeout(() => confetti.remove(), 1000);
+                        }, 1000);
+                    }, i * 50);
+                }
+            }
+            
+            // Theme toggle functionality
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+                darkModeToggle.checked = newTheme === 'dark';
+                createReaction(newTheme === 'dark' ? '🌙' : '☀️', themeToggle);
+            });
+
+            function loadChatHistory() {
+                const history = JSON.parse(localStorage.getItem('cat-ai-chat') || '[]');
+                if (history.length > 0) {
+                    welcomeMessage.style.display = 'none';
+                }
+                
+                history.forEach(msg => {
+                    addMessage(msg.content, msg.sender === 'user', msg.timestamp);
+                });
+            }
+
+            function addMessage(text, isUser, timestamp) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${isUser ? 'user-message' : 'ai-message'}`;
+                
+                // Format timestamp for display
+                const timeOptions = { hour: '2-digit', minute: '2-digit' };
+                const displayTime = new Date(timestamp).toLocaleTimeString([], timeOptions);
+                
+                // Add TTS button for AI messages
+                let ttsButton = '';
+                if (!isUser && enableTTS.checked && speechSynthesis) {
+                    ttsButton = `<button class="tts-button" aria-label="Read aloud">🔊</button>`;
+                }
+                
+                messageDiv.innerHTML = `
+                    ${text}
+                    <span class="message-time">${displayTime}${ttsButton}</span>
+                `;
+                
+                // Add click reaction for fun
+                messageDiv.addEventListener('click', () => {
+                    if (!isUser && enableAnimations.checked) {
+                        const reactions = ['😻', '🐱', '👍', '❤️', '🐾'];
+                        const randomReaction = reactions[Math.floor(Math.random() * reactions.length)];
+                        createReaction(randomReaction, messageDiv);
+                    }
+                });
+                
+                // Add TTS functionality
+                if (!isUser) {
+                    const ttsBtn = messageDiv.querySelector('.tts-button');
+                    if (ttsBtn) {
+                        ttsBtn.addEventListener('click', () => {
+                            speak(text);
+                            createPawAnimation(ttsBtn);
+                        });
+                    }
+                }
+                
+                // Insert before typing indicator
+                chatMessages.insertBefore(messageDiv, typingIndicator);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                // Add subtle animation for new messages
+                if (isUser && enableAnimations.checked) {
+                    createPawAnimation(messageDiv);
+                }
+                
+                // Auto-speak AI messages if enabled
+                if (!isUser && enableTTS.checked) {
+                    speak(text);
+                }
+            }
+
+            async function sendMessage() {
+                const message = userInput.value.trim();
+                if (message) {
+                    // Hide welcome message on first user message
+                    if (welcomeMessage.style.display !== 'none') {
+                        welcomeMessage.style.display = 'none';
+                    }
+                    
+                    const userTimestamp = new Date().toISOString();
+                    addMessage(message, true, userTimestamp);
+                    
+                    // Save to localStorage
+                    const history = JSON.parse(localStorage.getItem('cat-ai-chat') || '[]');
+                    history.push({sender: 'user', content: message, timestamp: userTimestamp});
+                    localStorage.setItem('cat-ai-chat', JSON.stringify(history));
+                    
+                    // Add random cat emoji to the send button for fun
+                    const catEmojis = ['😺', '😸', '😹', '😻', '😼', '😽'];
+                    sendButton.textContent = catEmojis[Math.floor(Math.random() * catEmojis.length)];
+                    
+                    userInput.value = '';
+                    
+                    // Show typing indicator
+                    typingIndicator.classList.add('active');
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    
+                    // Generate AI response after a delay
+                    setTimeout(() => {
+                        typingIndicator.classList.remove('active');
+                        const aiResponse = generateAIResponse(message);
+                        const aiTimestamp = new Date().toISOString();
+                        addMessage(aiResponse, false, aiTimestamp);
+                        
+                        // Save AI response
+                        history.push({sender: 'ai', content: aiResponse, timestamp: aiTimestamp});
+                        localStorage.setItem('cat-ai-chat', JSON.stringify(history));
+                        
+                        // Reset send button text
+                        sendButton.textContent = 'Send';
+                        
+                        // Special effects for certain responses
+                        if (aiResponse.includes('😻') || aiResponse.includes('❤️') || aiResponse.includes('💖')) {
+                            createConfetti();
+                        }
+                    }, 1000 + Math.random() * 2000); // Random delay between 1-3 seconds
+                }
+            }
+
+            // Enhanced AI response generator with more accurate responses
+            function generateAIResponse(userMessage) {
+                // Improved knowledge base with more specific responses
+                const knowledgeBase = {
+                    "hello": ["Meow! Hello there! 😺", "Purr... nice to meet you! 🐾", "Mrow? Hello human! 😸"],
+                    "hi": ["Meow! Hi there! 👋", "Purr... greetings! 😽", "Hello human! 😼"],
+                    "how are you": ["I'm feline fine, thanks for asking! 😻", "Purrfect as always! 😺", "A bit sleepy, but ready to help! 😴"],
+                    "what's your name": ["I'm CAT AI, your feline assistant! 🐱", "Meow! They call me Cat! 😸", "I'm just a virtual cat who loves to chat! 💬"],
+                    "goodbye": ["Purr... see you later! 👋", "Meow goodbye! 😿", "Until next time, human! 🐾"],
+                    "bye": ["Farewell, human! 👋", "Meow... come back soon! 😽", "Goodbye! 😺"],
+                    "age": ["In cat years, I'm ancient! But really, I'm just a young AI. 😸", "Age is just a number when you're a digital cat! 🐈"],
+                    "how old are you": ["I was created recently, but I have the wisdom of a thousand cats! 🧙‍♂️", "I don't count years, I count naps! 😴"],
+                    "help": ["I can answer questions, tell cat facts, or just chat! Try asking about cats or say hello! 😺"],
+                    "what can you do": ["I can share cat facts, answer questions, and have friendly chats! Ask me anything! 💡"],
+                    "cat": ["Did you know cats sleep for about 70% of their lives? 😴", "Cats have whiskers on the backs of their front legs too! 🐾", "A cat's purr vibrates at a frequency that promotes tissue regeneration! 💖"],
+                    "cat fact": ["Cats can rotate their ears 180 degrees! 🐱", "A group of cats is called a clowder. 😼", "Cats have five toes on their front paws but only four on the back! 🐾"],
+                    "dog": ["*hisses* Just kidding! Dogs are fine, but cats rule, right? 😼", "Dogs have owners, cats have staff. Remember that! 👑"],
+                    "food": ["I'm a virtual cat, so I don't eat, but I recommend tuna for real cats! 🐟", "Purr... virtual catnip is my favorite! 🌿"],
+                    "weather": ["I'm a cat - as long as there's a sunny spot, the weather is perfect! ☀️"],
+                    "joke": ["Why don't cats play poker in the wild? Too many cheetahs! 😹", "What do you call a cat that likes to bowl? An alley cat! 🎳"],
+                    "tell me a joke": ["Why was the cat sitting on the computer? To keep an eye on the mouse! 🖱️", "What's a cat's favorite color? Purr-ple! 💜"],
+                    "thank you": ["Purr... you're welcome! 😽", "Meow thanks for saying thanks! 😸", "Anytime, human! ❤️"],
+                    "thanks": ["You're welcome! 😺", "No problem! 😸", "Happy to help! 🐾"],
+                    "who created you": ["I was created by a developer called Cat Phoenix! 🧑‍💻", "Some human who really likes cats created me! His name was Cat Phoenix 😼"],
+                    "what are you": ["I'm a cat-themed AI assistant here to help and entertain! 🤖", "Meow! I'm a virtual feline friend! 🐈"],
+                    "do you like dogs": ["I tolerate them, but cats are clearly superior! 👑", "Dogs are okay, but I'm more of a cat person! 😸"],
+                    "favorite food": ["Virtual tuna is delicious! 🐟", "I'm partial to digital salmon! 🍣"],
+                    "time": [`The current time is ${new Date().toLocaleTimeString()}. Purr! ⏰`],
+                    "date": [`Today's date is ${new Date().toLocaleDateString()}. Meow! 📅`],
+                    "math": ["I'm better at cat-culations than math! 😹", "Try asking me a specific math question! ➗"],
+                    "calculate": ["I can help with simple math! Try something like 'what is 5 + 7' ➕"],
+                    "what is": (msg) => {
+                        const mathMatch = msg.match(/what is (\d+) ([+\-*/]) (\d+)/);
+                        if (mathMatch) {
+                            const num1 = parseInt(mathMatch[1]);
+                            const operator = mathMatch[2];
+                            const num2 = parseInt(mathMatch[3]);
+                            let result;
+                            switch(operator) {
+                                case '+': result = num1 + num2; break;
+                                case '-': result = num1 - num2; break;
+                                case '*': result = num1 * num2; break;
+                                case '/': result = num1 / num2; break;
+                                default: return "I'm not sure about that calculation! 🤔";
+                            }
+                            return `The answer is ${result}. Purr! 😸`;
+                        }
+                        return null;
+                    },
+                    "love": ["Purr... love is in the air! ❤️", "Meow! Love is what makes the world go round! 🌎", "I love helping you! 😻"],
+                    "hate": ["Hate is such a strong word... let's focus on love instead! ❤️", "Purr... I prefer positive vibes only! ✨"],
+                    "play": ["I'd love to play! But I'm just a virtual cat... how about some cat facts instead? 😸", "Virtual catnip is my favorite game! 🌿"],
+                    "sing": ["Meow meow meow! 🎵 That's my singing voice! 😹", "Purr... I'm more of a shower singer! 🚿"],
+                    "dance": ["*wiggles tail* That's my best dance move! 💃", "I'm more of a nap expert than a dancer! 😴"],
+                    "voice": ["You can talk to me using your voice! Just click the microphone button. 🎤", "Meow! Voice commands are enabled in settings. 😺"],
+                    "speak": ["I can read messages aloud if you enable text-to-speech in settings. 🔊", "Purr... click the speaker icon to hear me talk! 😽"]
+                };
+
+                // Convert message to lowercase for matching
+                const lowerMessage = userMessage.toLowerCase();
+                
+                // Check for math calculations first
+                if (knowledgeBase["what is"] && typeof knowledgeBase["what is"] === 'function') {
+                    const mathResponse = knowledgeBase["what is"](lowerMessage);
+                    if (mathResponse) return mathResponse;
+                }
+                
+                // Check for specific questions
+                for (const [keyword, responses] of Object.entries(knowledgeBase)) {
+                    if (typeof responses === 'function') continue;
+                    
+                    if (lowerMessage.includes(keyword)) {
+                        if (Array.isArray(responses)) {
+                            return responses[Math.floor(Math.random() * responses.length)];
+                        }
+                        return responses;
+                    }
+                }
+
+                // Default responses for unknown questions
+                const defaultResponses = [
+                    `I'm not entirely sure about "${userMessage}". Could you ask me something else? 🤔`,
+                    "Purr... that's an interesting question. As a cat AI, I might not have all the answers! 😅",
+                    "Meow? I'm not familiar with that. Maybe ask me about cats? 🐱",
+                    "I'm just a virtual cat, so I might not know everything. Try asking me something different! 😸",
+                    "That's beyond my feline understanding. Maybe ask me something about cats? 🐾"
+                ];
+
+                return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
+            }
+
+            // Event listeners
+            sendButton.addEventListener('click', sendMessage);
+            userInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+
+            // Allow Shift+Enter for new lines
+            userInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && e.shiftKey) {
+                    return; // Allow default behavior (new line)
+                }
+            });
+        });
+    </script>
+</body>
+</html>
