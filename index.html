@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cat Phoenix's Football & Entertainment Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #ff6600;
+            --secondary-color: #222;
+            --bg-color: #f5f5f5;
+            --card-bg: #fff;
+            --text-color: #333;
+            --hover-color: #ff8533;
+            --dark-text: #1a1a1a;
+            --light-gray: #e0e0e0;
+            --gradient: linear-gradient(135deg, #ff6600, #ff8533);
+            --shadow: 0 10px 30px rgba(0,0,0,0.1);
+            --radius: 12px;
+        }
+
+        .dark-mode {
+            --primary-color: #ff8533;
+            --secondary-color: #121212;
+            --bg-color: #1a1a1a;
+            --card-bg: #242424;
+            --text-color: #f0f0f0;
+            --hover-color: #ff6600;
+            --dark-text: #f0f0f0;
+            --light-gray: #333;
+            --shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--hover-color);
+        }
+
+        /* Header & Navigation */
+        header {
+            background-color: var(--secondary-color);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            color: var(--primary-color);
+        }
+
+        header nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        header nav ul li {
+            margin: 0 15px;
+        }
+
+        header nav ul li a {
+            color: white;
+            font-weight: 500;
+            position: relative;
+            padding: 5px 0;
+        }
+
+        header nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        header nav ul li a:hover::after {
+            width: 100%;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1574623452334-1e0ac2b3ccb4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1500&q=80') no-repeat center center/cover;
+            color: white;
+            text-align: center;
+            padding: 100px 20px;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            animation: fadeIn 1s ease;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .cta-buttons a {
+            display: inline-flex;
+            align-items: center;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .cta-buttons a:hover {
+            background-color: var(--hover-color);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 102, 0, 0.4);
+        }
+
+        .cta-buttons a i {
+            margin-right: 8px;
+        }
+
+        /* Featured Teams Section */
+        .featured-teams {
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+
+        .team-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .team-card {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+
+        .team-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+        .team-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .team-content {
+            padding: 20px;
+        }
+
+        .team-card h3 {
+            margin-bottom: 10px;
+            color: var(--dark-text);
+        }
+
+        .team-card p {
+            color: var(--text-color);
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        .team-card .card-action {
+            display: inline-block;
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .team-card .card-action i {
+            margin-left: 5px;
+            transition: transform 0.3s ease;
+        }
+
+        .team-card:hover .card-action i {
+            transform: translateX(5px);
+        }
+
+        /* Sections */
+        .section {
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .section h2 {
+            color: var(--primary-color);
+            font-size: 2rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--primary-color);
+        }
+
+        .view-all {
+            color: var(--primary-color);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+
+        .view-all i {
+            margin-left: 5px;
+            transition: transform 0.3s ease;
+        }
+
+        .view-all:hover i {
+            transform: translateX(5px);
+        }
+
+        /* Cards */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+        .card-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        .card h3 {
+            margin-bottom: 10px;
+            color: var(--dark-text);
+        }
+
+        .card p {
+            color: var(--text-color);
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #777;
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+        }
+
+        .card-action {
+            display: inline-block;
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .card-action i {
+            margin-left: 5px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover .card-action i {
+            transform: translateX(5px);
+        }
+
+        /* TikTok Section */
+        .tiktok-section {
+            background: linear-gradient(to right, #000000, #2a2a2a);
+            color: white;
+            padding: 60px 20px;
+            margin: 60px 0;
+        }
+
+        .tiktok-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .tiktok-videos {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .tiktok-video {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .tiktok-video:hover {
+            transform: scale(1.03);
+        }
+
+        .tiktok-video iframe {
+            width: 100%;
+            height: 400px;
+            border: none;
+        }
+
+        /* Carousel */
+        .carousel-section {
+            margin: 60px 0;
+            position: relative;
+        }
+
+        .carousel-container {
+            position: relative;
+            overflow: hidden;
+            padding: 20px 0;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .carousel-item {
+            min-width: 300px;
+            margin-right: 20px;
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .carousel-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .carousel-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .carousel-item-content {
+            padding: 15px;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(30,30,30,0.8);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+        }
+
+        .carousel-btn:hover {
+            background-color: var(--primary-color);
+        }
+
+        .carousel-btn.prev { left: 15px; }
+        .carousel-btn.next { right: 15px; }
+
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            gap: 10px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            borderRadius: 50%;
+            background-color: #ccc;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .dot.active {
+            background-color: var(--primary-color);
+            transform: scale(1.2);
+        }
+
+        /* Newsletter */
+        .newsletter {
+            background: var(--gradient);
+            padding: 60px 20px;
+            text-align: center;
+            color: white;
+            margin: 60px 0;
+        }
+
+        .newsletter h2 {
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+
+        .newsletter p {
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+
+        .newsletter-form {
+            display: flex;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 50px 0 0 50px;
+            font-family: inherit;
+        }
+
+        .newsletter-form button {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 0 25px;
+            border-radius: 0 50px 50px 0;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .newsletter-form button:hover {
+            background-color: black;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 60px 20px 30px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+
+        .footer-column h3 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 30px;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+
+        .footer-column p {
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: white;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            opacity: 1;
+            color: var(--primary-color);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        .watch-link {
+            display: inline-flex;
+            align-items: center;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .watch-link:hover {
+            background-color: var(--hover-color);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 102, 0, 0.4);
+            color: white;
+        }
+
+        .watch-link i {
+            margin-right: 8px;
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            opacity: 0.7;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 1s ease forwards;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .cards {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            header nav {
+                width: 100%;
+                margin-top: 15px;
+                display: none;
+            }
+            
+            header nav.active {
+                display: block;
+            }
+            
+            header nav ul {
+                flex-direction: column;
+            }
+            
+            header nav ul li {
+                margin: 10px 0;
+            }
+            
+            .nav-actions {
+                position: absolute;
+                top: 15px;
+                right: 20px;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+            }
+            
+            .newsletter-form {
+                flex-direction: column;
+            }
+            
+            .newsletter-form input {
+                border-radius: 50px;
+                margin-bottom: 10px;
+            }
+            
+            .newsletter-form button {
+                border-radius: 50px;
+                padding: 15px;
+            }
+            
+            .carousel-item {
+                min-width: 250px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero {
+                padding: 80px 20px;
+            }
+            
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .section h2 {
+                font-size: 1.5rem;
+            }
+            
+            .cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .carousel-item {
+                min-width: 220px;
+            }
+
+            .tiktok-videos {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <i class="fas fa-phoenix-framework"></i>
+                <span>Cat Phoenix</span>
+            </div>
+            
+            <button class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <nav id="main-nav">
+                <ul>
+                    <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="#football"><i class="fas fa-futbol"></i> Football</a></li>
+                    <li><a href="#tiktok"><i class="fab fa-tiktok"></i> TikTok</a></li>
+                    <li><a href="#movies"><i class="fas fa-film"></i> Movies</a></li>
+                    <li><a href="#entertainment"><i class="fas fa-music"></i> Entertainment</a></li>
+                </ul>
+            </nav>
+            
+            <div class="nav-actions">
+                <button class="theme-toggle" id="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Welcome to Cat Phoenix's Football & Entertainment Hub</h1>
+            <p>Your ultimate destination for football updates, movie reviews, trending songs, and viral TikTok content!</p>
+            <div class="cta-buttons">
+                <a href="https://tiktok.com/@catphoenix3" target="_blank">
+                    <i class="fab fa-tiktok"></i> Follow on TikTok
+                </a>
+                <a href="https://wa.me/256747810047" target="_blank">
+                    <i class="fab fa-whatsapp"></i> Join WhatsApp Group
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Teams Section -->
+    <section class="featured-teams" id="teams">
+        <div class="section-header">
+            <h2>Featured Football Teams</h2>
+            <a href="#football" class="view-all">View All Teams <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="team-cards">
+            <div class="team-card fade-in">
+                <img src="https://logodownload.org/wp-content/uploads/2016/03/Real-Madrid-logo-4-1.png" alt="Real Madrid" class="team-img">
+                <div class="team-content">
+                    <h3>Real Madrid</h3>
+                    <p>Spanish La Liga giants with 14 Champions League titles.</p>
+                    <a href="https://www.espn.com/soccer/team/_/id/86/real-madrid" target="_blank" class="card-action">Team Profile <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <div class="team-card fade-in">
+                <img src="https://logodownload.org/wp-content/uploads/2017/02/manchester-city-fc-logo-1.png" alt="Manchester City" class="team-img">
+                <div class="team-content">
+                    <h3>Manchester City</h3>
+                    <p>Premier League champions with exciting attacking football.</p>
+                    <a href="https://www.espn.com/soccer/team/_/id/382/manchester-city" target="_blank" class="card-action">Team Profile <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <div class="team-card fade-in">
+                <img src="https://logodownload.org/wp-content/uploads/2017/02/fc-barcelona-logo-1.png" alt="Barcelona" class="team-img">
+                <div class="team-content">
+                    <h3>FC Barcelona</h3>
+                    <p>Catalan club known for La Masia academy and tiki-taka style.</p>
+                    <a href="https://www.espn.com/soccer/team/_/id/83/barcelona" target="_blank" class="card-action">Team Profile <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <div class="team-card fade-in">
+                <img src="https://logodownload.org/wp-content/uploads/2020/06/bayern-munich-logo-1.png" alt="Bayern Munich" class="team-img">
+                <div class="team-content">
+                    <h3>Bayern Munich</h3>
+                    <p>German powerhouse dominating the Bundesliga.</p>
+                    <a href="https://www.espn.com/soccer/team/_/id/132/bayern-munich" target="_blank" class="card-action">Team Profile <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Added Football Watch Link -->
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="https://www.espn.com/watch/" target="_blank" class="watch-link">
+                <i class="fas fa-play-circle"></i> Watch Live Football
+            </a>
+        </div>
+    </section>
+
+    <section class="carousel-section">
+        <div class="section">
+            <div class="section-header">
+                <h2>Trending Now</h2>
+                <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <div class="carousel-container">
+                <button class="carousel-btn prev"><i class="fas fa-chevron-left"></i></button>
+                <div class="carousel-track" id="carousel-track"></div>
+                <button class="carousel-btn next"><i class="fas fa-chevron-right"></i></button>
+            </div>
+            
+            <div class="carousel-dots" id="carousel-dots"></div>
+        </div>
+    </section>
+
+    <section class="section" id="football">
+        <div class="section-header">
+            <h2>Latest Football Updates</h2>
+            <a href="football.html" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="cards" id="football-cards">
+            <!-- Football cards will be loaded here -->
+        </div>
+        
+        <!-- Added Football Watch Link -->
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="https://www.espn.com/watch/" target="_blank" class="watch-link">
+                <i class="fas fa-play-circle"></i> Watch Live Football Matches
+            </a>
+        </div>
+    </section>
+
+    <!-- TikTok Section -->
+    <section class="tiktok-section" id="tiktok">
+        <div class="tiktok-container">
+            <div class="section-header">
+                <h2 style="color: white;">Latest TikTok Videos</h2>
+                <a href="https://tiktok.com/@catphoenix3" target="_blank" class="view-all" style="color: #69c9d9;">View Profile <i class="fab fa-tiktok"></i></a>
+            </div>
+            
+            <div class="tiktok-videos">
+                <div class="tiktok-video">
+                    <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@catphoenix3" data-video-id="7234567890123456789" style="max-width:605px;min-width:325px;">
+                        <section></section>
+                    </blockquote>
+                </div>
+                
+                <div class="tiktok-video">
+                    <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@catphoenix3" data-video-id="7234567890123456788" style="max-width:605px;min-width:325px;">
+                        <section></section>
+                    </blockquote>
+                </div>
+                
+                <div class="tiktok-video">
+                    <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@catphoenix3" data-video-id="7234567890123456787" style="max-width:605px;min-width:325px;">
+                        <section></section>
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="movies">
+        <div class="section-header">
+            <h2>Latest Movies</h2>
+            <a href="movies.html" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="cards" id="movies-cards">
+            <!-- Movies cards will be loaded here -->
+        </div>
+        
+        <!-- Added Movies Watch Link -->
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="https://www.netflix.com" target="_blank" class="watch-link">
+                <i class="fas fa-play-circle"></i> Watch Movies on Netflix
+            </a>
+            <a href="https://www.hulu.com" target="_blank" class="watch-link" style="margin-left: 15px;">
+                <i class="fas fa-play-circle"></i> Watch Movies on Hulu
+            </a>
+        </div>
+    </section>
+
+    <section class="section" id="entertainment">
+        <div class="section-header">
+            <h2>Trending Songs & Videos</h2>
+            <a href="entertainment.html" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="cards" id="entertainment-cards">
+            <!-- Entertainment cards will be loaded here -->
+        </div>
+    </section>
+
+    <section class="newsletter">
+        <h2>Stay Updated</h2>
+        <p>Subscribe to our newsletter to receive the latest updates on football, movies, and entertainment directly to your inbox.</p>
+        <form class="newsletter-form">
+            <input type="email" placeholder="Your email address" required>
+            <button type="submit">Subscribe</button>
+        </form>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>About Us</h3>
+                <p>Cat Phoenix's Entertainment Hub brings you the latest in football, movies, music, and viral content from around the world.</p>
+                <div class="social-links">
+                    <a href="https://tiktok.com/@catphoenix3" target="_blank"><i class="fab fa-tiktok"></i></a>
+                    <a href="https://wa.me/256747810047" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://www.youtube.com/@CatPhoenix-zl5ym"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="#football">Football</a></li>
+                    <li><a href="#tiktok">TikTok</a></li>
+                    <li><a href="#movies">Movies</a></li>
+                    <li><a href="#entertainment">Entertainment</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Watch Now</h3>
+                <ul class="footer-links">
+                    <li><a href="https://www.espn.com/watch/" target="_blank">Watch Live Football</a></li>
+                    <li><a href="https://www.netflix.com" target="_blank">Watch Movies on Netflix</a></li>
+                    <li><a href="https://www.hulu.com" target="_blank">Watch Movies on Hulu</a></li>
+                    <li><a href="https://www.youtube.com" target="_blank">Watch on YouTube</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Contact</h3>
+                <ul class="footer-links">
+                    <li><a href="https://wa.me/256747810047" target="_blank"><i class="fab fa-whatsapp"></i> +256 747 810047</a></li>
+                    <li><a href="mailto:info@catphoenix.com"><i class="fas fa-envelope"></i> info@catphoenix.com</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            <p>&copy; 2025 Cat Phoenix's Entertainment Hub. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script async src="https://www.tiktok.com/embed.js"></script>
+    <script>
+        // DOM Elements
+        const themeToggle = document.getElementById('theme-toggle');
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const mainNav = document.getElementById('main-nav');
+        
+        // Theme Toggle
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const icon = themeToggle.querySelector('i');
+            if (document.body.classList.contains('dark-mode')) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+        
+        // Check for saved theme preference
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+            const icon = themeToggle.querySelector('i');
+            icon.classList.remove('fa-moon');
+            icon.classList.add('fa-sun');
+        }
+        
+        // Mobile Menu Toggle
+        mobileMenuBtn.addEventListener('click', () => {
+            mainNav.classList.toggle('active');
+        });
+        
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!mainNav.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                mainNav.classList.remove('active');
+            }
+        });
+        
+        // Football
+        async function loadFootballLatest() {
+            try {
+                const container = document.getElementById('football-cards');
+                
+                // Simulate API call delay
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                const mockData = [
+                    { 
+                        match: "Man City vs Arsenal", 
+                        score: "2-1", 
+                        date: "2025-03-15", 
+                        venue: "Etihad Stadium",
+                        image: "https://images.unsplash.com/photo-1574623452334-1e0ac2b3ccb4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+                    },
+                    { 
+                        match: "Barcelona vs Real Madrid", 
+                        score: "3-2", 
+                        date: "2025-03-14", 
+                        venue: "Camp Nou",
+                        image: "https://images.unsplash.com/photo-1596510913920-85d87a1800d2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+                    },
+                    { 
+                        match: "Liverpool vs Chelsea", 
+                        score: "1-1", 
+                        date: "2025-03-13", 
+                        venue: "Anfield",
+                        image: "https://images.unsplash.com/photo-1529900748604-07564a03e7a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+                    }
+                ];
+                
+                container.innerHTML = '';
+                
+                mockData.forEach(m => {
+                    const card = document.createElement('div');
+                    card.className = 'card fade-in';
+                    card.innerHTML = `
+                        <img src="${m.image}" alt="${m.match}" class="card-img">
+                        <div class="card-content">
+                            <h3>${m.match}</h3>
+                            <div class="card-meta">
+                                <span><i class="far fa-calendar-alt"></i> ${m.date}</span>
+                                <span><i class="fas fa-map-marker-alt"></i> ${m.venue}</span>
+                            </div>
+                            <p>Final Score: <strong>${m.score}</strong></p>
+                            <a href="https://www.espn.com/watch/" target="_blank" class="card-action">Match Highlights <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (error) {
+                console.error("Error loading football data:", error);
+                document.getElementById('football-cards').innerHTML = "<p>Unable to load football updates at this time.</p>";
+            }
+        }
+
+        // Movies
+        async function loadMoviesLatest() {
+            try {
+                const container = document.getElementById('movies-cards');
+                
+                await new Promise(resolve => setTimeout(resolve, 1200));
+                
+                const mockData = [
+                    { 
+                        title: "The New Era", 
+                        release: "2025-04-10", 
+                        link: "https://www.netflix.com",
+                        image: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                        rating: "4.8"
+                    },
+                    { 
+                        title: "Space Odyssey", 
+                        release: "2025-03-22", 
+                        link: "https://www.netflix.com",
+                        image: "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                        rating: "4.5"
+                    },
+                    { 
+                        title: "Dark Secrets", 
+                        release: "2025-03-05", 
+                        link: "https://www.netflix.com",
+                        image: "https://images.unsplash.com/photo-1535016120720-40c646be5580?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                        rating: "4.3"
+                    }
+                ];
+                
+                container.innerHTML = '';
+                
+                mockData.forEach(m => {
+                    const card = document.createElement('div');
+                    card.className = 'card fade-in';
+                    card.innerHTML = `
+                        <img src="${m.image}" alt="${m.title}" class="card-img">
+                        <div class="card-content">
+                            <h3>${m.title}</h3>
+                            <div class="card-meta">
+                                <span><i class="far fa-calendar-alt"></i> ${m.release}</span>
+                                <span><i class="fas fa-star"></i> ${m.rating}/5.0</span>
+                            </div>
+                            <a href="${m.link}" target="_blank" class="card-action">Watch Trailer <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (error) {
+                console.error("Error loading movies data:", error);
+                document.getElementById('movies-cards').innerHTML = "<p>Unable to load movies at this time.</p>";
+            }
+        }
+
+        // Entertainment
+        async function loadEntertainmentLatest() {
+            try {
+                const container = document.getElementById('entertainment-cards');
+                
+                await new Promise(resolve => setTimeout(resolve, 1400));
+                
+                const mockData = [
+                    { 
+                        title: "Summer Vibes", 
+                        artist: "DJ Star", 
+                        link: "https://www.youtube.com",
+                        image: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                        type: "Song"
+                    },
+                    { 
+                        title: "Midnight Dreams", 
+                        artist: "The Night Owls", 
+                        link: "https://www.youtube.com",
+                        image: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                        type: "Album"
+                    },
+                    { 
+                        title: "Electric Pulse", 
+                        artist: "Neon Lights", 
+                        link: "https://www.youtube.com",
+                        image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                        type: "Music Video"
+                    }
+                ];
+                
+                container.innerHTML = '';
+                
+                mockData.forEach(m => {
+                    const card = document.createElement('div');
+                    card.className = 'card fade-in';
+                    card.innerHTML = `
+                        <img src="${m.image}" alt="${m.title}" class="card-img">
+                        <div class="card-content">
+                            <h3>${m.title}</h3>
+                            <div class="card-meta">
+                                <span><i class="fas fa-user"></i> ${m.artist}</span>
+                                <span><i class="fas fa-compact-disc"></i> ${m.type}</span>
+                            </div>
+                            <a href="${m.link}" target="_blank" class="card-action">Listen Now <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (error) {
+                console.error("Error loading entertainment data:", error);
+                document.getElementById('entertainment-cards').innerHTML = "<p>Unable to load entertainment content at this time.</p>";
+            }
+        }
+
+        // Carousel
+        async function loadCarousel() {
+            try {
+                const track = document.getElementById('carousel-track');
+                const dotsContainer = document.getElementById('carousel-dots');
+                
+                await new Promise(resolve => setTimeout(resolve, 800));
+                
+                const mockData = [
+                    { 
+                        type: 'image', 
+                        title: 'New Movie Trailers', 
+                        image: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80', 
+                        link: 'https://www.netflix.com',
+                        category: 'Movies'
+                    },
+                    { 
+                        type: 'image', 
+                        title: 'Football Highlights', 
+                        image: 'https://images.unsplash.com/photo-1574623452334-1e0ac2b3ccb4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80', 
+                        link: 'https://www.espn.com/watch/',
+                        category: 'Football'
+                    },
+                    { 
+                        type: 'image', 
+                        title: 'Trending TikTok Challenges', 
+                        image: 'https://images.unsplash.com/photo-1611605698335-8b156e0430c2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80', 
+                        link: 'https://www.tiktok.com',
+                        category: 'Entertainment'
+                    },
+                    { 
+                        type: 'image', 
+                        title: 'New Music Releases', 
+                        image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80', 
+                        link: 'https://www.youtube.com',
+                        category: 'Music'
+                    },
+                    { 
+                        type: 'image', 
+                        title: 'Exclusive Interviews', 
+                        image: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80', 
+                        link: '#',
+                        category: 'Entertainment'
+                    }
+                ];
+                
+                track.innerHTML = '';
+                dotsContainer.innerHTML = '';
+                
+                mockData.forEach((item, index) => {
+                    const div = document.createElement('div');
+                    div.className = 'carousel-item';
+                    div.innerHTML = `
+                        <img src="${item.image}" alt="${item.title}">
+                        <div class="carousel-item-content">
+                            <span style="color: var(--primary-color); font-weight: 500;">${item.category}</span>
+                            <h3>${item.title}</h3>
+                            <a href="${item.link}" target="_blank" class="card-action">View More <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    `;
+                    track.appendChild(div);
+                    
+                    const dot = document.createElement('div');
+                    dot.className = 'dot';
+                    if (index === 0) dot.classList.add('active');
+                    dot.addEventListener('click', () => {
+                        goToSlide(index);
+                    });
+                    dotsContainer.appendChild(dot);
+                });
+            } catch (error) {
+                console.error("Error loading carousel data:", error);
+                document.getElementById('carousel-track').innerHTML = "<p>Unable to load trending content.</p>";
+            }
+        }
+
+        // Carousel functionality
+        let currentIndex = 0;
+        let autoPlayInterval;
+        
+        function initCarousel() {
+            const track = document.getElementById('carousel-track');
+            const items = track.children;
+            const dots = document.querySelectorAll('.dot');
+            
+            if (items.length === 0) return;
+            
+            const prevBtn = document.querySelector('.carousel-btn.prev');
+            const nextBtn = document.querySelector('.carousel-btn.next');
+            
+            function updateCarousel() {
+                const itemWidth = items[0].getBoundingClientRect().width + 20;
+                track.style.transform = `translateX(-${currentIndex * itemWidth}px)`;
+                
+                // Update dots
+                dots.forEach((dot, index) => {
+                    if (index === currentIndex) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                });
+            }
+            
+            function goToSlide(index) {
+                currentIndex = index;
+                updateCarousel();
+                resetAutoPlay();
+            }
+            
+            nextBtn.addEventListener('click', () => { 
+                currentIndex = (currentIndex + 1) % items.length; 
+                updateCarousel();
+                resetAutoPlay();
+            });
+            
+            prevBtn.addEventListener('click', () => { 
+                currentIndex = (currentIndex - 1 + items.length) % items.length; 
+                updateCarousel();
+                resetAutoPlay();
+            });
+            
+            function startAutoPlay() {
+                autoPlayInterval = setInterval(() => { 
+                    currentIndex = (currentIndex + 1) % items.length; 
+                    updateCarousel();
+                }, 5000);
+            }
+            
+            function resetAutoPlay() {
+                clearInterval(autoPlayInterval);
+                startAutoPlay();
+            }
+            
+            // Touch events for mobile
+            let startX = 0;
+            track.addEventListener('touchstart', e => startX = e.touches[0].clientX);
+            track.addEventListener('touchend', e => {
+                const endX = e.changedTouches[0].clientX;
+                if(endX < startX - 50) {
+                    currentIndex = (currentIndex + 1) % items.length;
+                } else if(endX > startX + 50) {
+                    currentIndex = (currentIndex - 1 + items.length) % items.length;
+                }
+                updateCarousel();
+                resetAutoPlay();
+            });
+            
+            // Pause autoplay on hover
+            track.addEventListener('mouseenter', () => {
+                clearInterval(autoPlayInterval);
+            });
+            
+            track.addEventListener('mouseleave', () => {
+                startAutoPlay();
+            });
+            
+            window.addEventListener('resize', updateCarousel);
+            
+            startAutoPlay();
+        }
+        
+        // Newsletter form
+        document.querySelector('.newsletter-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = this.querySelector('input').value;
+            // In a real application, you would send this to a server
+            this.innerHTML = '<p style="color:white; margin:0;">Thank you for subscribing!</p>';
+        });
+
+        // Initialize everything when DOM is loaded
+        window.addEventListener('DOMContentLoaded', async () => {
+            await loadFootballLatest();
+            await loadMoviesLatest();
+            await loadEntertainmentLatest();
+            await loadCarousel();
+            initCarousel();
+            
+            // Animate elements on scroll
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('fade-in');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            
+            document.querySelectorAll('.card, .section-header, .team-card').forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>
